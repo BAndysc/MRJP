@@ -92,18 +92,23 @@ Gramatyka jest LL(1) wtw gdy dwie różne produkcje tego samego nieterminala maj
 \subsection{Parsowanie wstępujące (bottom up)}
 
 \textbf{Redukcje w LR(0) - po wszystkich terminalach}
-
+\begingroup
 \begin{enumerate}
+    \small
+    \setlength{\itemsep}{1pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
     \item Dodajemy produkcję początkową $Z \ra \circ S\#$
     \item Tworzymy stan z produkcją $Z$
     \item Tam gdzie jest $\circ$ przed nieterminalem, musimy dodać produkcję tego nieterminala (dopełnienie)
 \end{enumerate}
-
+\footnotesize{Uwaga: to jest tylko część grafu, ale nawet tutaj już widać, że nie jest LR(0), dlatego nie ma całości.}
 \begin{figure}[H]
 \include{lr0}
 \end{figure}
 
-Gdy nie ma takich konfliktów to jest LR(0), a jak są, gramatyka wciąż może być SLR(1).
+\small Jest konflikt, więc gramatyka NIE jest LR(0), ale może być SLR(1). Gdy nie ma konfliktów - jest LR(0).
+\endgroup
 
 \subsubsection{SLR(1)}
 
