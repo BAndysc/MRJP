@@ -1,0 +1,41 @@
+Do symboli (nieterminali i terminali) w gramatyce dodajemy \textsc{atrybuty}, tj. informację, jaką ze sobą ten symbol niesie.
+
+\begin{itemize}
+    \item atrybuty syntezowane
+    
+    gdy mamy produkcję $X \ra \alpha$ i ustawiamy atrybut nieterminalowi po lewej stronie - X. Ten atrybut będzie propagowany w górę. 
+    
+    \item atrybuty dziedziczone
+    
+    gdy mamy produkcję $X \ra \alpha Y \beta$ i ustawiamy atrybut nieterminalowi po prawej stronie - Y. Ten atrybut będzie propagowany w dół (gdy będziemy parsować $Y \ra \gamma$, ten nieterminal może się dowiedzieć co przyszło do niego z góry)
+    
+    \item atrybuty wbudowane - atrybuty nadawane terminalom (identyczne zasady)
+\end{itemize}
+
+\textsc{Przykład}:
+
+$\quad Z \ra S$
+
+$\quad S \ra X | XS$
+
+$\quad X \ra ab | aXb$
+
+Chcemy nadać atrybut $Z.ak$ na true wtw gdy słowo $w$ jest postaci $(a^nb^n)^n$
+
+$\quad Z \ra S$   \{$Z.ok = S.ileX == S.\#ab\ and\ S.ok$\}
+
+$\quad S \ra X$    \{$S.ileX = 1$, $S.\#ab = X_0.ile$, $S.ok = true$\}
+
+$\quad S_0 \ra XS_1$ \{$S_0.ileX = 1 + S_1.ileX$, $S_0.ok = S_1.ok\ and\ X.ile == S1.\#ab$, $S_0.\#ab = S_1.\#ab$\}
+
+$\quad X \ra ab$ \{$X.ile = 1$\}
+
+$\quad X_0 \ra aX_1b$ \{$X_0.ile = 1 + X_1.ile$\}
+
+$X.ile$ - ile wynosi $k$ w wyprodukowanym $a^kb^k$
+
+$S.ileX$ - ile Xów wyprodukowało S
+
+$S.ok$ - czy wszystkie X które ten S wyprowadził, $X.ile$ ma tę samą wartość
+
+$S.\#ab$ - jaką wartość ma $X.ile$, którą wyprowadził (bo każdy X ma mieć tę samą)

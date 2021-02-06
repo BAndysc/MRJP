@@ -1,0 +1,138 @@
+$LR(0) \subseteq SLR(1) \subseteq LALR(1) \subseteq LR(1)$;  $\ \ \ \ \ $
+$LL(1) \subseteq LR(1)$
+
+\textsc{Na przykładzie:}
+
+$\quad S \ra SuX\ |\ aX$
+
+$\quad X \ra bY\ |\ b$
+
+$\quad Y \ra aX$
+
+
+\subsection{Przerabianie gramatyki na LL(1)}
+\begin{itemize}
+    \item Lewostronna rekurencja: $A \ra A \alpha\ |\ \beta$ zastępujemy przez $A \ra \beta A'$, $A' \ra \alpha A'\ |\ \varepsilon$
+    
+    $S \ra a X S'$
+    
+    $S' \ra uXS'\ |\ \varepsilon$
+    \item "Wyciąganie przed nawias": $A \ra \alpha\ |\ \alpha B$ zastępujemy przez $A \ra \alpha C'$, $C' \ra \varepsilon$, $C' \ra B$
+    
+    $X \ra bY'$
+    
+    $Y' \ra \varepsilon$
+    
+    $Y' \ra aX$
+\end{itemize}
+
+
+\subsection{Liczenie First($\alpha$)}
+
+$First(\alpha\beta\gamma) = \left\{ 
+    \begin{array}{ll} 
+        \alpha & gdy\ \alpha\ jest\ terminalem\ (w\ tym\ \varepsilon) \\
+        First(\alpha) & gdy\ \alpha\ jest\ nieterminalem\\ & ORAZ\ \varepsilon\ nie\ nalezy\ do\ First(\alpha) \\
+        First(\alpha)-\{\varepsilon \} \cup First(\beta\gamma) & gdy\ \alpha\ jest\ nieterminalem\\ & ORAZ\ \varepsilon\ nalezy\ do\ First(\alpha)
+    \end{array}
+\right.$
+
+Do zbioru $First(A)$ dodajemy wszystkie Firsty prawych strony produkcji A. $\varepsilon \in First(ABC)$ wtedy gdy $\varepsilon$ należy do wszystkich firstów po prawej stronie.
+
+\textsc{Przykład}:
+
+$\quad First(S) = \{ a \}$
+
+$\quad First(S') = \{ u, \varepsilon \}$
+
+$\quad First(X) = \{ b \}$
+
+$\quad First(Y') = \{ a, \varepsilon \}$
+
+\subsection{Liczenie Follow($\alpha$)}
+
+$A \ra \beta B\alpha$
+
+$Follow(B) = First(\alpha)\ \cup\ \left\{ \begin{array}{ll}  Follow(A) & gdy\ \varepsilon \in First(\alpha)\ (takze\ gdy\ \alpha\ nie\ ma,\\ & tzn.\ jest\ \varepsilon) \\ \emptyset  & wpp  \end{array} \right.$
+
+$\beta$ w ogóle nie ma znaczenia, może być $\varepsilon$, $\alpha$ też może być dowolna, składać się z terminali, nieterminali bądź być puste. W skrócie: żeby policzyć $Follow(B)$, patrzymy na wszystkie produkcje, gdzie $B$ jest po prawej stronie, lewa strona %nigdy nie zasypia%
+nie ma znaczenia.
+
+\textsc{Przykład}:
+
+$\quad Follow(S) = \{ \# \}$ (do nieterminala startowego dajemy symbol końcowy)
+
+$\quad Follow(S') = Follow(S) = \{ \# \}$
+
+$\quad Follow(X) = Follow(Y') \cup First(S') \cup Follow(S) \cup Follow(S') = \{ u, \#\}$
+
+$\quad Follow(Y') = Follow(X) = \{ u, \#\}$
+
+\subsection{Liczenie Select($A \rightarrow \beta$)}
+
+$Select(A \ra \alpha) = First(\alpha \cdot Follow(A))$ (jak $\alpha$ może być $\varepsilon$ to bierzemy Firsta oraz Follow, jak nie jest to bierzemy tylko First)
+
+\textsc{Przykład}:
+
+$\quad Select(Y' \ra \varepsilon) = \{ u, \#\}$
+
+$\quad Select(S' \ra \varepsilon) = \{ \#\}$
+
+$\quad Select(X \ra bY) = \{ b \}$
+
+$\quad Select(S \ra aXS') = \{ a \}$
+
+$\quad Select(Y' \ra aX) = \{ a \}$
+
+$\quad Select(S' \ra uXS') = \{ u \}$
+
+\subsection{Parsowanie zstępujące (top down) - LL(1)}
+Gramatyka jest LL(1) wtw gdy dwie różne produkcje tego samego nieterminala mają nieprzecinające się zbiory.
+
+\subsection{Parsowanie wstępujące (bottom up)}
+
+\textbf{Redukcje w LR(0) - po wszystkich terminalach}
+
+\begin{enumerate}
+    \item Dodajemy produkcję początkową $Z \ra \circ S\#$
+    \item Tworzymy stan z produkcją $Z$
+    \item Tam gdzie jest $\circ$ przed nieterminalem, musimy dodać produkcję tego nieterminala (dopełnienie)
+\end{enumerate}
+
+\begin{figure}[H]
+\include{lr0}
+\end{figure}
+
+Gdy nie ma takich konfliktów to jest LR(0), a jak są, gramatyka wciąż może być SLR(1).
+
+\subsubsection{SLR(1)}
+
+\textbf{Redukcje w SLR(1) - tylko po terminalach, które są w Follow danego nieterminala}
+
+Liczymy zbiory FOLLOW:
+
+$Follow(S) = \{\#, u\}$
+
+$Follow(X) = Follow(Y) = \{\#, u\}$
+
+Teraz redukcje robimy tylko po znakach ze zbioru Follow danego nieterminala.
+
+\begin{figure}[H]
+\include{slr1}
+\end{figure}
+
+Nie ma konfliktów, więc jest SLR(1)
+
+\subsubsection{LALR(1) / LR(1)}
+
+[uwaga - zmieniamy gramatykę - tamta jest już SLR(1), więc nie ma sensu rozpatrywać czy jest LALR(1)]
+
+Zamiast patrzeć przy redukcjach na globalne zbiory follow, patrzymy na "lokalny" przyszłości, tzn. dopełniając regułę $X \ra \alpha \circ B \beta, \{a \}$, zbiór przyszłości rozwiniętej reguły $B$ to $First(\beta)$, a jeśli $\beta$ jest nullowalne, to także przyszłość reguły $X$.
+
+Po konstrukcji automaty LR(1) możemy skleić te same stany (przy sklejaniu nie patrzymy na przyszłość: po prostu jeśli dwa stany mają dokładnie te same stany, z dokładnością do kropek, można skleić) tworząc automat LALR(1). Nie zawsze jest to możliwe, tzn. po sklejeniu tych ,,samych stanów'' mogą pojawić się konflikty, wtedy gramatyka jest LR(1), ale nie LALR(1).
+
+\input{lr1}
+
+\subsubsection{Co z $\varepsilon$ w produkcji?}
+
+Nic, po prostu nic nie piszemy i z produkcji $A \rightarrow \varepsilon$, w grafie pojawi się $A \rightarrow \circ $, po której od razu robimy redukcję (nie ma przejść po $\varepsilon$, od razu redukcja).

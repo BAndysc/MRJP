@@ -1,0 +1,61 @@
+\subsection{x86}
+\begin{minted}{c}
+mov EAX, EBX             EAX = EBX
+lea EAX, [4 * EBX]       EAX = 4 * EBX
+add EAX, [EBP - 8]       EAX = EAX + wartość pod (EBP - 8)
+cmp EAX, EBX             
+jg label                 skok gdy EAX > EBX
+jl label                 skok gdy EAX < EBX
+jge label                skok gdy EAX >= EBX
+jle label                skok gdy EAX <= EBX
+je/jne label             
+push ebp                 standardowy prolog
+mov rbp, esp             standardowy prolog
+leave                    standardowy epilog
+ret                      standardowy epilog
+imul EBX                 EDX:EAX = EAX * EBX
+imul EBX, ECX            EDX:EAX = EBX * ECX
+idiv ECX                 EAX = EDX:EAX / ECX, EDX = EDX:EAX % ECX
+mul                      mnożenie bez znaku
+div                      dzielenie bez znaku
+not EAX                  EAX = ~EAX
+neg EAX                  EAX = -EAX
+\end{minted}
+
+\subsubsection{Protokół wywołania GCC+libc (aka “cdecl”)}
+
+\begin{itemize}
+    \item rejestry: $EAX$, $ECX$, $EDX$, $EBX$, $ESP$, $EBP$, $ESI$, $EDI$
+    \item $EAX$, $ECX$, $EDX$ - caller saved (== można je zmieniać w funkcji bez obaw)
+    \item pozostałe - callee saved (nie można zmieniać bez przywrócenia starej wartości przed wyjściem)
+    \item argumenty od końca (najpierw wkładamy ostatnie)
+    \item wynik w $EAX$
+    \item gcc wyrównuje stos do 16 bajtów, tzn. przed zrobieniem $call$ stos jest wyrównany, tzn. po $call$, $ESP \equiv 4  mod 16$, tzn. po $push\ ebp$: $ESP \equiv 8 mod 16$.
+    \item ale slajdy mówią o wyrównaniu tylko w przypadku x86\_64
+\end{itemize}
+
+\subsubsection{x86\_64}
+\begin{itemize}
+    \item rejestry: $RAX$, $RBX$, $RCX$, $RDX$, $RBP$, $RSP$, $RSI$, $RDI$, $R8$, $R9$, $R10$, $R11$, $R12$, $R13$, $R14$, $R15$
+    \item inty przekazywane w: $EDI$, $ESI$, $EDX$, $ECX$, $R8D$, $R9D$
+    \item $RBP$, $RBX$ and $R12$ - $R15$ callee saved
+    \item stos na pewno wyrównany
+\end{itemize}
+
+
+\subsection{JVM}
+\begin{minted}{c}
+iconst_0            push 0
+istore_2            pop from stack to 2. local var
+iload_3             push 3. local variable
+if_icmpge           skacze gdy wartość głębsza jest >= wartości na topie
+aload_0             załaduj tablicę ze zmiennej lokalnej 0
+iaload              wczytaj wartość z tablicy (głębiej tablica)
+iinc X Y            zwiększ zmienną lokalną X o Y
+dup                 duplikuj ostatnią rzecz na stosie
+dup2                duplikuje dwie rzeczy ze stosu
+ifeq label          skacze gdy wartość na stosie == 0
+iastore             zapisuje do tablicy (od góry: wartość, indeks, tablica)
+bipush 123          umieszcza bajt na stosie
+idiv, iadd, isub, imul
+\end{minted}

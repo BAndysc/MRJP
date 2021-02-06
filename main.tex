@@ -1,0 +1,103 @@
+\documentclass[landscape, 10pt, twocolumn]{article}
+\usepackage[utf8]{inputenc}
+
+\setlength{\parindent}{0in}
+
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{0pt}{0pt}
+\titlespacing*{\subsection}{0pt}{0pt}{0pt}
+
+\usepackage{fancyhdr}
+ 
+\pagestyle{fancy}
+
+\usepackage[margin=0.5in,top=0.7in,footskip=.25in]{geometry}
+\usepackage{float}
+\usepackage{minted}
+\usepackage{bm}
+\setminted[python]{
+    breaklines=true,
+    mathescape=true,
+    escapeinside=@@,
+    encoding=utf8
+}
+\setminted[c]{
+    breaklines=true,
+    mathescape=true,
+    escapeinside=||,
+    encoding=utf8
+}
+
+% minted workaround
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+\usetikzlibrary{chains,fit,shapes}
+
+ \everymath{\mathtt{\xdef\tmp{\fam\the\fam\relax}\aftergroup\tmp}}
+ \everydisplay{\mathtt{\xdef\tmp{\fam\the\fam\relax}\aftergroup\tmp}}
+
+
+\title{ŚCIAGA MRJPY}
+\author{b.andysc }
+\date{January 2019}
+
+\newcommand{\ra}{\rightarrow}
+
+\begin{document}
+
+
+\section*{Changelog  $\ $} %  $\ $ is a hack so that math code is fixed-width font
+
+\begin{itemize}
+    \item \textbf{31.01.2020}
+    
+    \textbf{1.4 Liczenie Select}
+    
+    było: $\quad Select(X \ra bY) = \{ b, \#\}$
+    
+    powinno być: $\quad Select(X \ra bY) = \{ b \}$
+    
+    \item \textbf{03.02.2020}
+    
+    \textbf{1.6.2 LALR(1) / LR(1)}
+    
+    dodana uwaga o zmianie gramatyki
+    
+    reguła $S \ra aAa $ zamieniona na $S \ra Aa$
+\end{itemize}
+
+\newpage
+$\\$
+\newpage
+
+
+\section{Parsery}
+
+    \input{parsery}
+
+\section{Gramatyki atrybutywne}
+
+    \input{atrybuty}
+
+
+\section{SSA oraz optymalizacje}
+
+    \input {optymalizacje}
+
+\section{Kod czwórkowy i rejestry}
+
+    \input {czworkowy}
+
+\section{ASM i JVM}
+
+    \input{asem}
+    
+korczyn; nie biorę odpowiedzialności za błęęędy
+
+\end{document}

@@ -1,0 +1,277 @@
+
+\subsection{Ogólnie optymalizacje}
+
+\begin{itemize}
+    \item \textsc{Constant folding/propagation}
+
+\begin{figure}[H]
+ \begin{minipage}{0.1\textwidth}
+  \centering
+  \begin{minted}{python}
+t1 := 7
+t2 := t1 - 1
+t3 := t2 * t2
+a := b + t3
+  \end{minted}
+ \end{minipage}
+ \begin{minipage}{0.04\textwidth}
+ $\rightarrow$
+ \end{minipage}
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+a := b + 36
+  \end{minted}
+ \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+r1 := 1
+...
+r5 = phi(entry: r1, L5: r7) 
+  \end{minted}
+ \end{minipage}
+ \begin{minipage}{0.04\textwidth}
+ $\rightarrow$
+ \end{minipage}
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+r1 := 1
+...
+r5 = phi(entry: 1, L5: r7) 
+  \end{minted}
+ \end{minipage}
+\end{figure}
+
+\item \textsc{Copy propagation}
+
+\begin{figure}[H]
+ \begin{minipage}{0.1\textwidth}
+  \centering
+  \begin{minted}{python}
+x := y
+t := x + 1
+  \end{minted}
+ \end{minipage}
+ \begin{minipage}{0.04\textwidth}
+ $\rightarrow$
+ \end{minipage}
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+x := y
+t := y + 1
+  \end{minted}
+ \end{minipage}
+\end{figure}
+
+\item \textsc{Local Common Subexpression Elimination}
+
+\begin{figure}[H]
+ \begin{minipage}{0.1\textwidth}
+  \centering
+  \begin{minted}{python}
+t6 := 4*i
+x := a[t6]
+t7 := 4*i
+t8 := 4*j
+t9 := a[t8]
+a[t7] := t9
+t10 := 4*j
+a[t10] := x
+goto L5
+  \end{minted}
+ \end{minipage}
+ \begin{minipage}{0.04\textwidth}
+ $\rightarrow$
+ \end{minipage}
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+t6 := 4*i
+x := a[t6]
+
+t8 := 4*j
+t9 := a[t8]
+a[t6] := t9
+
+a[t8] := x
+goto L5
+  \end{minted}
+ \end{minipage}
+\end{figure}
+
+\item \textsc{Global Common Subexpression Elimination}
+
+To samo, ale między blokami prostymi
+
+\item \textsc{Dead Code Elimination}
+
+Wywalamy nieużywane rejestry
+
+\item \textsc{Moving code out of the loop}
+
+\begin{figure}[H]
+ \begin{minipage}{0.15\textwidth}
+  \centering
+  \begin{minted}{c}
+  |$\ $|
+while(i<=n-3) {
+    s += a[i];
+    i++;
+}
+
+  \end{minted}
+ \end{minipage}
+ \begin{minipage}{0.04\textwidth}
+ $\rightarrow$
+ \end{minipage}
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+t = n-3;
+while(i<=t) {
+    s += a[i];
+    i++;
+}
+  \end{minted}
+ \end{minipage}
+\end{figure}
+
+\item \textsc{Strength reduction} - zastępowanie drogich operacji prostszymi (np. mnożenie dodawaniem)
+
+\begin{figure}[H]
+ \begin{minipage}{0.15\textwidth}
+  \centering
+  \begin{minted}{c}
+    i := 0;
+goto L2
+L1: i := i+1
+    t2 := 4*i
+    t3 := a[t2]
+    s := s + t3
+L2: if(a[t2]<=k) goto L1
+
+  \end{minted}
+ \end{minipage}
+ \begin{minipage}{0.04\textwidth}
+ $\rightarrow$
+ \end{minipage}
+ \begin{minipage}{0.2\textwidth}
+  \centering
+  \begin{minted}{python}
+    t2 := 0;
+    goto L2
+L1: t2 := t2 + 4 
+    t3 := a[t2]
+    s := s + t3
+L2: if(a[t2]<=k) goto L1
+
+  \end{minted}
+ \end{minipage}
+\end{figure}
+
+\item \textsc{Loop unrolling, loop inlining}
+
+Loop unrolling - zmniejszenie liczby obrotów poprzez wykonywanie kilku obrotów pętli na raz (np. na x86 zamiast robić strcmp na bajtach - robić na całych słowach)
+
+Loop inlining - unrolling do zera
+
+\end{itemize}
+
+\subsection{Przykład:}
+
+
+\begin{minted}{c}
+for (m = a[i]; (i > 0) && (3 + m < a[i-]); i--)
+    a[i] = a[i-1];
+a[i] = m;
+        czwórkowy:                      SSA
+ 1. L0:                             L0:
+ 2.    m = a[i]                       m = a[i]
+ 3. L1:                             L1:
+ 4.     if i > 0 goto L2 else L3       i1 = |$\phi$|(L0: i, L4: i2)
+ 5.                                    if i1 > 0 goto L2 else L3
+ 6. l2:                             L2:
+ 7.     t1 = 3 + m                     t1 = 3 + m
+ 8.     t2 = i - 1                     t2 = i1 - 1
+ 9.     t3 = a[t2]                     t3 = a[t2]
+10.     if t1 < t3 goto L4 else L3     if t1 < t3 goto L4 else L3
+11. L4:                             L4:
+12.     t4 = i - 1                     t4 = i1 - 1
+13.     t5 = a[t4]                     t5 = a[t4]
+14.     a[i] = t5                      a[i1] = t5
+15.     i = i - 1                      i2 = i1 - 1
+16.     goto L1                        goto L1
+17. L3:                             L3:
+18.      a[i] = m                      a[i1] = m
+\end{minted}
+
+\begin{enumerate}
+    \item const folding: stałe wyliczamy w czasie kompilacji
+    \item common subexpression substitution: tam gdzie występuje to samo, redukujemy (ale tylko obliczenia), np. w linijce 12 i 15 wyliczamy $i1 - 1$, które zostało już policzone w linijce 8. Uwaga na tablice!
+    
+    \item copy propagation:
+    
+    widzimy $y$ po prawej stronie równości
+    
+    szukamy $y = a$ (gdzie a jest po prostu rejestrem)
+    
+    zamieniamy $y$ na $a$
+    
+    \begin{minted}{c}
+                     krok 2   krok 3       krok 2     krok 3
+ 1. L0:
+ 2.   m = a[i]
+ 3. L1:
+ 4.    i1 = |$\phi$|(L0: i, L4: i2)
+ 5.    if i1 > 0 
+        goto L2 else L3
+ 6. L2:
+ 7.    t1 = 3 + m
+ 8.    t2 = i1 - 1
+ 9.    t3 = a[t2]
+10.    if t1 < t3
+        goto L4 else L3
+11. L4:
+12.    t4 = i1 - 1    t4 = t2
+13.    t5 = a[t4]              t5 = a[t2]   t5 = t3
+14.    a[i1] = t5                                     a[i1] = t3
+15.    i2 = i1 - 1    i2 = t2
+16.    goto L1
+17. L3:
+18.    a[i1] = m    
+    \end{minted}
+    
+    
+    Teraz znowu powtarzamy te kroki aż nic się nie będzie zmieniało
+
+    \item Dead code optimization i wywalamy 12, 13 linijkę
+    \item Wyciąganie stałych wyrażeń przed pętlę
+        \begin{minted}{c}
+ 1. L0:
+ 2.   m = a[i]
+ 3.   t1 = 3 + m     <- tutaj
+ 4. L1:
+ 5.    i1 = |$\phi$|(L0: i, L4: i2)   // <- phi(L0: i, L4: t2)
+ 6.    if i1 > 0 goto L2 else L3
+ 7. L2:
+ 8.    t2 = i1 - 1
+ 9.    t3 = a[t2]
+10.    if t1 < t3 goto L4 else L3
+11. L4:
+12.    a[i1] = t3
+13.    i2 = t2               // <- usuwamy
+14.    goto L1
+15. L3:
+16.    a[i1] = m    
+    \end{minted}
+    
+    Teraz możemy znowu rozpropagowac kopię i w linijce 5. użyć $t2$ zamiast $i2$ (a następnie w ramach usuwania martwego kodu usunąć przypisanie do $i2$)
+    
+    
+\end{enumerate}

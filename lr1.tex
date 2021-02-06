@@ -1,0 +1,90 @@
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,412); %set diagram left start at 0, and has height of 412
+
+%Straight Lines [id:da7411648470074887] 
+\draw [color={rgb, 255:red, 0; green, 158; blue, 255 }  ,draw opacity=1 ]   (392,218) -- (243.55,96.27) ;
+\draw [shift={(242,95)}, rotate = 399.35] [color={rgb, 255:red, 0; green, 158; blue, 255 }  ,draw opacity=1 ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Straight Lines [id:da740624439381262] 
+\draw [color={rgb, 255:red, 0; green, 158; blue, 255 }  ,draw opacity=1 ]   (392,218) -- (265.89,173.66) ;
+\draw [shift={(264,173)}, rotate = 379.37] [color={rgb, 255:red, 0; green, 158; blue, 255 }  ,draw opacity=1 ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+
+% Text Node
+\draw    (23.5,126) -- (112.5,126) -- (112.5,256) -- (23.5,256) -- cycle  ;
+\draw (68,191) node  [align=left] {Z → .S\#, \_\\S → .Aa, \#\\S → .bAc, \#\\S → .Bc, \#\\S → .bBa, \#\\A → .d, a\\B → .d, c};
+% Text Node
+\draw    (172,53) -- (242,53) -- (242,93) -- (172,93) -- cycle  ;
+\draw (207,73) node  [align=left] {A → d., a\\B → d., c};
+% Text Node
+\draw (296,27) node  [align=left] {to nie SLR(1), bo tu\\mamy konflikt Reduce-Reduce};
+% Text Node
+\draw (371,65) node  [align=left] {reduce(A → d)};
+% Text Node
+\draw (372,87) node  [align=left] {reduce(B → d)};
+% Text Node
+\draw (300,64) node  [align=left] {a\\c};
+% Text Node
+\draw (138,111) node  [align=left] {d};
+% Text Node
+\draw    (184.5,220) -- (273.5,220) -- (273.5,296) -- (184.5,296) -- cycle  ;
+\draw (229,258) node  [align=left] {S → b.Ac, \#\\S → b.Ba, \#\\A → .d, c\\B → .d, a};
+% Text Node
+% wersja sprzed czasów Andrzeja
+% \draw    (157.5,322) -- (246.5,322) -- (246.5,362) -- (157.5,362) -- cycle  ;
+% \draw (202,342) node  [align=left] {S → a.Aa, \#\\A → .d, a};
+% Text Node
+\draw    (101,381) -- (181,381) -- (181,403) -- (101,403) -- cycle  ;
+\draw (141,392) node  [align=left] {Z → S.\#, \_};
+% Text Node
+\draw    (192.5,135) -- (263.5,135) -- (263.5,175) -- (192.5,175) -- cycle  ;
+\draw (228,155) node  [align=left] {A → d., c\\B → d., a};
+% Text Node
+\draw (365,147) node  [align=left] {reduce(A → d)};
+% Text Node
+\draw (366,169) node  [align=left] {reduce(B → d)};
+% Text Node
+\draw (296,151) node  [align=left] {c\\a};
+% Text Node
+\draw (410,263) node  [align=left] {Gdybyśmy skleili te stany (bo\\mają te same, reguły (razem\\z kropkami!)) to byłby konflikt\\po literce a byłyby dwie redukcje\\(to samo po literce c)\\dlatego to nie LALR(1)};
+% Connection
+\draw    (242,71.29) -- (316.5,67.66) ;
+\draw [shift={(318.5,67.56)}, rotate = 537.21] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (242,75.97) -- (317.01,82.33) ;
+\draw [shift={(319,82.5)}, rotate = 184.85] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (112.5,153.22) -- (181.92,94.29) ;
+\draw [shift={(183.44,93)}, rotate = 499.67] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (112.5,209.52) -- (182.65,238.71) ;
+\draw [shift={(184.5,239.48)}, rotate = 202.59] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (228.63,220) -- (228.21,177) ;
+\draw [shift={(228.19,175)}, rotate = 449.44] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (263.5,158.6) -- (311.01,163.42) ;
+\draw [shift={(313,163.62)}, rotate = 185.79] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (263.5,152.93) -- (310.5,150.18) ;
+\draw [shift={(312.5,150.07)}, rotate = 536.6600000000001] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% wersja sprzed czasów Andrzeja
+% Connection
+% \draw    (112.5,241.15) -- (182.92,320.5) ;
+% \draw [shift={(184.25,322)}, rotate = 228.41] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+% Connection
+\draw    (91.61,256) -- (136.32,379.12) ;
+\draw [shift={(137,381)}, rotate = 250.04000000000002] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+
+\end{tikzpicture}

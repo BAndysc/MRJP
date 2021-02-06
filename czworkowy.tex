@@ -1,0 +1,35 @@
+\subsection{Liczenie zbioru zmiennych żywych}
+Jeśli za operacją $R_x = operacja(R_1, R_2)$ zbiór zmiennych żywych to $\mathcal{X}$, to przed tą operacją zbiór zmiennych żywych $\mathcal{Y} = \mathcal{X} - \{R_x\} \cup \{R_1, R_2\}$. \textbf{Uwaga!} W wyniku przypisań w tych zadaniach może się okazać, że liczymy kilka razy to samo (choć zmienne mają inne nazwy). Jeśli znajdziesz w tym zadaniu na egzaminie miejsce na optymalizację pewnie warto się zapytać czy należy to zrobić.
+
+\begin{table}[H]
+\begin{tabular}{p{0.06\textwidth}|p{0.07\textwidth}|p{0.04\textwidth}|p{0.04\textwidth}|p{0.04\textwidth}|p{0.04\textwidth}|p{0.04\textwidth}|p{0.04\textwidth}}
+& & \multicolumn{2}{c}{Co jest w} & \multicolumn{4}{c}{Gdzie jest dana} \\
+& & \multicolumn{2}{c}{danym rejestrze} & \multicolumn{4}{c}{zmienna} \\
+\hline 
+ quad & ASM & R0 & R1 & a & b & c & d \\
+\hline 
+  &  &  &  &  & B &  & D \\
+\hline 
+ a = b &  &  &  & B &  &  & D \\
+\hline 
+ b = d &  &  &  & B & D &  &  \\
+\hline 
+ d = a &  &  &  & B & D &  & B \\
+\hline 
+ d = b - d & R0 = D & b &  & B & D, R0 &  & B \\
+\hline 
+  & R1 = B & b & d, a & B, R1 & R0, D &  & R1, B \\
+\hline 
+  & R0 = R0-R1 & d & a & B, R1 & D &  & R0 \\
+\hline 
+ c = a - d   & R1 = R1 - R0 & d & c & & D & R1 & R0 \\
+\hline 
+  & C = R1 & d & c &  & D & R1, C  & R0 \\
+\hline 
+  & R1 = D & d & b &  & D, R1 & C  & R0 \\
+\hline 
+  & B = R1 & d & b &  & B, D, R1 & C & R0 \\
+\hline 
+  & D = R0 & d & b &  & B, R1 & C & R0, D 
+\end{tabular}
+\end{table}
